@@ -5,7 +5,7 @@ import os
 def open_connection():
     #Read the config file
     config = configparser.ConfigParser()
-    config.read(os.path.expanduser("~/Desktop/IMAPClient/config.txt"))
+    config.read("../config.txt")
 
     #Connect to server
     hostname = config['server']['hostname']
