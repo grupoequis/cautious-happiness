@@ -1,4 +1,4 @@
-import imaplib #IMAP4
+import imaplib2 as imaplib #IMAP4
 import os #path functions
 import re #for easy parsing using regex
 from server_connect import open_connection #open connection as set by config.txt

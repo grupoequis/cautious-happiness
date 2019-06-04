@@ -1,4 +1,4 @@
-import imaplib
+import imaplib2 as imaplib
 from server_connect import open_connection
 
 def mailbox_num_msg(mailbox_name, connection):

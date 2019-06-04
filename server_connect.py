@@ -1,4 +1,4 @@
-import imaplib
+import imaplib2 as imaplib
 import configparser
 import os
 
@@ -24,5 +24,5 @@ def open_connection():
         connection.login(username, password)
     except:
         raise SystemExit("Couldn't log in.")
-
+    print("Logged in succesfully.")
     return connection
