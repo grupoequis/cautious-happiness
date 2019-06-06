@@ -69,7 +69,7 @@ try:
     idler = Idler(connection)
     idler.start()
     # Because this is just an example, exit after 1 minute.
-    time.sleep(3*60)
+    time.sleep(20)
 finally:
     # Clean up.
     idler.stop()
