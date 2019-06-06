@@ -1,0 +1,8 @@
+[account]
+username = asda
+password = sadasd
+
+[server]
+hostname = imap.gmail.com
+port = 993
+

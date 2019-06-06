@@ -19,10 +19,10 @@ def LogIn():
     username=w.Entry1.get()
     password=w.Entry2.get()
     config = configparser.ConfigParser()
-    config.read(os.path.expanduser("config.txt"))
+    config.read("../config.txt")
     config['account']['username']=username
     config['account']['password']=password
-    with open("config.txt", 'w') as configfile:    # save
+    with open("../config.txt", 'w') as configfile:    # save
         config.write(configfile)
     sys.stdout.flush()
     exit()
@@ -43,8 +43,3 @@ def destroy_window():
 if __name__ == '__main__':
     import login_interface
     login_interface.vp_start_gui()
-
-
-
-
-

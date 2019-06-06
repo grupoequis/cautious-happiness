@@ -1,7 +1,7 @@
 import imaplib2, time
-import server_connect
+import imap4ssl
 import threading
-import message_mngr
+import messages
 import fetch_rfc822
 
 # This is the threading object that does all the waiting on
@@ -11,7 +11,7 @@ class Idler(object):
         self.thread = threading.Thread(target=self.idle)
         self.connection = connection
         self.event = threading.Event()
-
+        self.msg_ids = messages.get_ids(self.connection)[1]
     def start(self):
         print("Starting IDLE thread.")
         self.thread.start()
@@ -25,6 +25,8 @@ class Idler(object):
     def idle(self):
         # Starting an unending loop here
         while True:
+            #Selecting mailbox to exit AUTH state
+            self.connection.select("INBOX")
             # if event was set on .stop()
             # then return
             if self.event.isSet():
@@ -40,7 +42,7 @@ class Idler(object):
                     self.event.set()
             # Do the actual idle call. Return immediately,
             # asynchronous return on callback
-            self.connection.idle(callback=callback)
+            self.connection.idle(callback=callback, timeout=30)
             # Wait until the thread event is set
             self.event.wait()
             # Act on whether there was an IDLE event
@@ -51,29 +53,9 @@ class Idler(object):
     # The method that gets called when a new email arrives.
     # Replace it with something better.
     def dosync(self):
-        new_ids = message_mngr.get_inbox_ids(connection)[0].decode("utf-8").split()
-        new_ids = [id for id in new_ids if id not in msg_ids]
+        response, new_ids = messages.get_ids(self.connection)
+        new_ids = new_ids[0].decode("utf-8").split()
+        new_ids = [id for id in new_ids if id not in self.msg_ids]
+        self.msg_ids = self.msg_ids + new_ids
         for id in new_ids:
-            fetch_rfc822.fetch_message("INBOX", id, connection)
-
-try:
-    # Set the following two lines to your creds and server
-    connection = server_connect.open_connection()
-    msg_ids = message_mngr.get_inbox_ids(connection)[0].decode("utf-8").split()
-    for id in msg_ids:
-        fetch_rfc822.fetch_message("INBOX", id, connection)
-    # We need to get out of the AUTH state, so we just select
-    # the INBOX.
-    connection.select("INBOX")
-    # Start the Idler thread
-    idler = Idler(connection)
-    idler.start()
-    # Because this is just an example, exit after 1 minute.
-    time.sleep(20)
-finally:
-    # Clean up.
-    idler.stop()
-    idler.join()
-    connection.close()
-    # This is important!
-    connection.logout()
+            print(fetch_rfc822.fetch_message("INBOX", id, self.connection))

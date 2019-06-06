@@ -2,11 +2,7 @@ import imaplib2 as imaplib
 import configparser
 import os
 
-def open_connection():
-    #Read the config file
-    config = configparser.ConfigParser()
-    config.read("../config.txt")
-
+def open_connection(config):
     #Connect to server
     hostname = config['server']['hostname']
     port = config['server']['port']
@@ -15,6 +11,7 @@ def open_connection():
         connection = imaplib.IMAP4_SSL(host=hostname)
     except:
         raise SystemExit("Couldn't connect to server.")
+    print("Succesfully connected.")
 
     #Login to account
     username = config['account']['username']
