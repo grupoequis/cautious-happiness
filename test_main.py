@@ -5,6 +5,9 @@ import messages
 import fetch_rfc822
 import configparser
 import time
+import os
+
+os.system("pip3 install ./imaplib2-master")
 
 try:
     config = configparser.ConfigParser()
