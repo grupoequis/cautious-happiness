@@ -4,10 +4,18 @@ import mailboxes
 import messages
 import fetch_rfc822
 import configparser
-import time
-import os
+import time, os, sys
 
-os.system("pip3 install ./imaplib2-master")
+try:
+    import tkinter
+except ImportError:
+    raise SystemExit("Module tkinter is required.")
+if (sys.maxsize <= 2**32):
+    print("Program must run on a 64bit system.")
+try:
+    import imaplib2
+except ImpotError:
+    raise SystemExit("Module imaplib2 is required (try <pip3 install ./imaplib2-master).")
 
 try:
     config = configparser.ConfigParser()
