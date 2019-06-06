@@ -11,7 +11,7 @@ try:
 except ImportError:
     raise SystemExit("Module tkinter is required.")
 if (sys.maxsize <= 2**32):
-    print("Program must run on a 64bit system.")
+    raise SystemExit("Program must run on a 64bit system.")
 try:
     import imaplib2
 except ImpotError:
