@@ -45,16 +45,16 @@ class Idler(object):
                     if not self.event.isSet():
                         self.needsync = True
                         self.event.set()
-                    # Do the actual idle call. Return immediately,
-                    # asynchronous return on callback
-                    self.connection.idle(callback=callback, timeout=1800)
-                    # Wait until the thread event is set
-                    self.event.wait()
-                    # Act on whether there was an IDLE event
-                    # or the thread was stopped using .stop()
-                    if self.needsync:
-                        self.event.clear()
-                        self.dosync()
+                # Do the actual idle call. Return immediately,
+                # asynchronous return on callback
+                self.connection.idle(callback=callback, timeout=1800)
+                # Wait until the thread event is set
+                self.event.wait()
+                # Act on whether there was an IDLE event
+                # or the thread was stopped using .stop()
+                if self.needsync:
+                    self.event.clear()
+                    self.dosync()
         except:
             self.stop()
     # The method that gets called when a new email arrives.
