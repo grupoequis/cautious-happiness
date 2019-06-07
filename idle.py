@@ -37,7 +37,7 @@ class Idler(object):
                 if self.event.isSet():
                     return
                 # set needsync on false initially
-                # to tell if an IDLE vent happenned
+                # to tell if an IDLE event happenned
                 self.needsync = False
                 # Method called on IDLE event
                 def callback(args):
@@ -56,7 +56,7 @@ class Idler(object):
                     self.event.clear()
                     self.dosync()
         except:
-            self.stop()
+            self.connection.logout()
     # The method that gets called when a new email arrives.
     # Replace it with something better.
     def dosync(self):
