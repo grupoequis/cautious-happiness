@@ -1,4 +1,4 @@
-import imaplib2, time
+import imaplib2, time, sys
 import imap4ssl
 import threading
 import messages
@@ -30,8 +30,6 @@ class Idler(object):
                 print(fetch_rfc822.fetch_message("INBOX", id, self.connection))
             # Starting an unending loop here
             while True:
-                #Selecting mailbox to exit AUTH state
-                self.connection.select("INBOX")
                 # if event was set on .stop()
                 # then return
                 if self.event.isSet():
@@ -45,6 +43,8 @@ class Idler(object):
                     if not self.event.isSet():
                         self.needsync = True
                         self.event.set()
+                #Selecting mailbox to exit AUTH state
+                self.connection.select("INBOX")
                 # Do the actual idle call. Return immediately,
                 # asynchronous return on callback
                 self.connection.idle(callback=callback, timeout=1800)
@@ -55,8 +55,8 @@ class Idler(object):
                 if self.needsync:
                     self.event.clear()
                     self.dosync()
-        except:
-            self.connection.logout()
+        except KeyboardInterrupt:
+            pass
     # The method that gets called when a new email arrives.
     # Replace it with something better.
     def dosync(self):

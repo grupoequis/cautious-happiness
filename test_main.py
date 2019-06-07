@@ -33,11 +33,13 @@ try:
     idler.start()
     # Because this is just an example, exit after 1 minute.
     time.sleep(900)
+except KeyboardInterrupt:
+    pass
 finally:
     # Clean up.
     try:
         idler.stop()
         idler.join()
+        c.logout()
     except:
         print("Couldn't join idler.")
-    c.logout()
