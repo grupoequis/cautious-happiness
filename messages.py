@@ -1,6 +1,7 @@
 import imaplib2 as imalib
 import re #for easy parsing using regex
 
+# Parse data received from calling IMAP4.list()
 def __parse_list(line):
     #Set pattern for imap4.list() response
     list_response_pattern = re.compile(r"\((?P<flags>.*)\) \"(?P<delimiter>.*)\" (?P<name>.*)") #pattern for parsing binary
@@ -10,6 +11,7 @@ def __parse_list(line):
     mailbox_name = mailbox_name.strip(r'"')
     return (flags, delimiter, mailbox_name)
 
+# Display every message id from every mailbox
 def search_all(connection):
     response, mbox_data = connection.list()
     for line in mbox_data:
@@ -17,10 +19,10 @@ def search_all(connection):
         response, msg_ids = get_ids(connection, mbox_name, "ALL")
         print(mbox_name, response, msg_ids)
 
+# Retrieve every message id from a particular mailbox
 def get_ids(connection, mailbox="INBOX", flags="ALL"):
     response, last_id = connection.select(mailbox, readonly=True)
     if(response == "NO"):
         return response, last_id
     response, msg_ids = connection.search(None, flags)
-    connection.close()
     return response, msg_ids

@@ -3,7 +3,8 @@ import email
 import email.parser
 from email import policy
 
-def fetch_message(mailbox_name, msgid, connection):
+# Fetch a message's data as described in RFC822
+def fetch_message(mailbox_name, msgid, connection, body=False):
 #with imaplib_connect.open_connection() as connection:
     connection.select(mailbox_name, readonly=True)
     rmessage = []
@@ -16,8 +17,18 @@ def fetch_message(mailbox_name, msgid, connection):
             msg.set_default_type("text/plain")
             for header in ['subject', 'to', 'from']:
                 rmessage.append(msg[header])
-            #rmessage.append(msg.get_body())
+            if body:
+                rmessage.append(msg.get_body())
 
     connection.close()
 
     return typ, rmessage
+
+def fetch_message_print(mailbox_name, msgid, connection, body=False):
+    response, message = fetch_message(mailbox_name, msgid, connection, body)
+    print("{:^8}: {}".format("SUBJECT", message[0]))
+    print("{:^8}: {}".format("TO", message[1]))
+    print("{:^8}: {}".format("FROM", message[2]))
+    if body:
+        print("{:^8}: {}".format("BODY:", message[3]))
+    print("----------------")

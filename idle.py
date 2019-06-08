@@ -3,11 +3,15 @@ import imap4ssl
 import threading
 import messages
 import fetch_rfc822
+# IDLE threaded class implementation based on Tim Stoop's
+# Python: IMAP IDLE with imaplib2 post at blog.timstoop.com
 
 # This is the threading object that does all the waiting on
 # the event
 class Idler(object):
-    def __init__(self, connection):
+    def __init__(self, connection, readonly=True, body=False):
+        self.body = body
+        self.readonly = readonly
         self.thread = threading.Thread(target=self.idle)
         self.connection = connection
         self.event = threading.Event()
@@ -26,8 +30,12 @@ class Idler(object):
 
     def idle(self):
         try:
+            print("Fetching UNREAD messages:")
             for id in self.msg_ids:
-                print(fetch_rfc822.fetch_message("INBOX", id, self.connection))
+                fetch_rfc822.fetch_message_print("INBOX", id, self.connection, self.body)
+                self.connection.select("INBOX")
+                if not self.readonly:
+                    self.connection.store(id, '+FLAGS', '\Seen')
             # Starting an unending loop here
             while True:
                 # if event was set on .stop()
@@ -47,7 +55,9 @@ class Idler(object):
                 self.connection.select("INBOX")
                 # Do the actual idle call. Return immediately,
                 # asynchronous return on callback
-                self.connection.idle(callback=callback, timeout=1800)
+                # timeout is 29min by default.
+                print("Idling...")
+                self.connection.idle(callback=callback, timeout=30)
                 # Wait until the thread event is set
                 self.event.wait()
                 # Act on whether there was an IDLE event
@@ -57,12 +67,14 @@ class Idler(object):
                     self.dosync()
         except KeyboardInterrupt:
             pass
-    # The method that gets called when a new email arrives.
-    # Replace it with something better.
+    # Method that gets called when a new message arrives
     def dosync(self):
         response, new_ids = messages.get_ids(self.connection, flags = "UNSEEN")
         new_ids = new_ids[0].decode("utf-8").split()
         new_ids = [id for id in new_ids if id not in self.msg_ids]
         self.msg_ids = self.msg_ids + new_ids
         for id in new_ids:
-            print(fetch_rfc822.fetch_message("INBOX", id, self.connection))
+            print("New mail!!!")
+            fetch_rfc822.fetch_message_print("INBOX", id, self.connection, self.body)
+            if not self.readonly:
+                self.connection.store(id, '+FLAGS', '\Seen')

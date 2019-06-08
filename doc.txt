@@ -1,0 +1,42 @@
+--DOC
+
+imap4ssl:
+    open_connection(config)
+        Starts an IMAP4_SSL connection given a config file containing the server
+        and account to be used.
+
+idle:
+    class Idler(connection, readonly=True, body=False)
+        Creates a thread to run an idle connection using imaplib2
+        and display UNREAD emails.
+        readonly may be set to False to mark UNREAD emails as READ
+        body may be set to True to display html body of the messages.
+
+        start():
+            Starts thread.
+
+        stop():
+            Stops thread.
+
+        join():
+            Joins thread.
+
+messages:
+    search_all(connection)
+        Displays every message id from every accessible mailbox.
+        in the connection.
+
+    get_ids(connection, mailbox="INBOX", flags="ALL")
+        Returns response, every message id from mailbox.
+
+mailboxes:
+    msgnum(mailbox_name, connection)
+        Displays number of messages in a given mailbox.
+
+    list_all(connection):
+        Displays MESSAGES, RECENT, UIDNEXT, UIVALIDITY, UNSEEN info from
+        every mailbox.
+
+fetch_rfc822:
+    fetch_message(mailbox_name, msgid, connection, body=False)
+        Returns response, message in RFC822 format.
