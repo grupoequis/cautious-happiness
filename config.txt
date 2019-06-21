@@ -1,7 +1,0 @@
-[account]
-username 
-password
-
-[server]
-hostname = imap.gmail.com
-port = 993
