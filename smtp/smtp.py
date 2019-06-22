@@ -3,7 +3,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+import url
 
 try:
     try:
@@ -12,20 +12,25 @@ try:
         raise ("Couldn't establish SMTP connection over SSL.")
     print("Connection to SMTP server established succesfully.")
     conn.set_debuglevel(2)
+    username =
+    password =
+    sender =
+    receiver =
+    subject = 
     try:
-        conn.login('', '')
+        conn.login(username, password)
     except:
         pass
     print("Logged in to SMTP server succesfully.")
 
     ##creating mail
     msg = MIMEMultipart()
-    msg.add_header("from", "")
-    msg.add_header("to", "")
-    msg.add_header("subject", "")
-    msg.attach(MIMEText("", "plain"))
+    msg.add_header("from", sender)
+    msg.add_header("to", receiver)
+    msg.add_header("subject", subject)
+    msg.attach(MIMEText(message, "plain"))
 
-    files = ["att.txt"]
+    files = []
     for a_file in files:
         attachment = open(a_file, 'rb')
         file_name = os.path.basename(a_file)
@@ -35,8 +40,13 @@ try:
         payload.add_header('Content-Disposition', 'attachment', filename= file_name)
         msg.attach(payload)
 
-
-    conn.send_message(msg, '', '')
+    if len(msg.as_string()) > 25000000:
+        print("Size is larger than 25MB. Proceed?")
+        if input() == 'n':
+            exit()
+    #conn.send_message(msg, username, receiver)
+    #url.reputation("google.com")
+    urls = url.get_urls(msg.as_string()+' '+subject)
 
 
 finally:
