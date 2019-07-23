@@ -44,10 +44,14 @@ try:
         print("Size is larger than 25MB. Proceed?")
         if input() == 'n':
             exit()
-    #conn.send_message(msg, username, receiver)
-    #url.reputation("google.com")
-    urls = url.get_urls(msg.as_string()+' '+subject)
 
+    lowrep = url.get_rep(msg.as_string()+' '+subject)
+    if lowrep:
+        for url in lowrep:
+        print("url "+url+" is non trusted. Proceed?")
+        if input() == 'n':
+            exit()
+    conn.send_message(msg, username, receiver)
 
 finally:
     conn.quit()

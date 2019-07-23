@@ -22,7 +22,7 @@ def reputation(domain):
         conn.close()
 
 # Returns a list containing all low-rep domains contained in a text.
-def raise_rep(text):
+def get_rep(text):
     urls = get_urls(text)
     lowrep = []
     for url in urls:
