@@ -1,6 +1,7 @@
 import imaplib2 as imaplib
 import email
 import email.parser
+import os
 from email import policy
 
 # Fetch a message's data as described in RFC822
@@ -18,8 +19,9 @@ def fetch_message(mailbox_name, msgid, connection, body=False):
             for header in ['subject', 'to', 'from']:
                 rmessage.append(msg[header])
             if body:
-                rmessage.append(msg.get_body())
-
+                rmessage.append(msg.get_body(preferencelist=('plain', 'html')).get_content())
+            print(str(save_attachment(msg, "/home/efrain/Desktop/attachments")))
+            
     connection.close()
 
     return typ, rmessage
@@ -32,3 +34,27 @@ def fetch_message_print(mailbox_name, msgid, connection, body=False):
     if body:
         print("{:^8}: {}".format("BODY:", message[3]))
     print("----------------")
+
+def save_attachment(msg, download_folder="/tmp"):
+        """
+        Given a message, save its attachments to the specified
+        download folder (default is /tmp)
+
+        return: file path to attachment
+        """
+        paths = []
+        for part in msg.walk():
+            if part.get_content_maintype() == 'multipart':
+                continue
+            if part.get('Content-Disposition') is None:
+                continue
+
+            filename = part.get_filename()
+            att_path = os.path.join(download_folder, filename)
+            paths.append(att_path)
+
+            if not os.path.isfile(att_path):
+                fp = open(att_path, 'wb+')
+                fp.write(part.get_payload(decode=True))
+                fp.close()
+        return paths
