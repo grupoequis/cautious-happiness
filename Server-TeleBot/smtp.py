@@ -42,7 +42,6 @@ class smtp(object):
         urls = url.get_urls(msg.as_string()+' '+subject)
         lowrep = url.get_rep(message+' '+subject)
         limitsize=0
-        print ("culo")
         if len(msg.as_string()) > 25000000:
             limitsize=1
 

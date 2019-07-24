@@ -110,14 +110,9 @@ class start(object):
 					self.bot.send_message(message.chat.id,"Espere...")
 					config = configparser.ConfigParser(allow_no_value=True)
 					config.read("config.txt")
-					config['account']['username']=self.username
-					config['account']['password']=password
-					with open("config.txt", 'w') as configfile:    # save
-					        config.write(configfile)
 					retry=0
 					try :
-					
-						self.c = imap4ssl.open_connection(config)
+						self.c = imap4ssl.open_connection(config,self.username,password)
 						self.smtp.connection(self.username,password)
 					except BaseException as be:
 						self.bot.send_message(message.chat.id,'No se pudo establecer la conexión.')
@@ -146,7 +141,7 @@ class start(object):
 		try:
 			if(message.text == 'Revisar Inbox'):
 				self.mail=message
-				idler = idle.Idler(self.c, self.fetch)
+				idler = idle.Idler(self.c, self.fetch,readonly=False)
 				idler.start()
 				self.bot.send_message(message.chat.id, 'Espere mientras se cargan los correos.')
 				#markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
