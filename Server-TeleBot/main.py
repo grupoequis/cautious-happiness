@@ -14,7 +14,7 @@ if (sys.maxsize <= 2**32):
     raise SystemExit("Program must run on a 64bit system.")
 
 
-API_TOKEN="951787503:AAE6qHomMQn2wWBFOgqR-rEboUMgTrDtNOY"
+API_TOKEN="917180618:AAG47Av7a4O6GTmtERqBJzqwzQggabR_330"
 bot = telebot.TeleBot(API_TOKEN)
  
 def hdl(message):
@@ -23,8 +23,8 @@ def hdl(message):
 @bot.message_handler(commands = ["start"])
 def welcome(message):
     try:
-        file = open('equis.jpg', 'rb')
-        bot.send_photo(message.chat.id, file)
+        sti = open('welcome.webp', 'rb')
+        bot.send_sticker(message.chat.id, sti)
         x = datetime.datetime.now()
         h = x.hour
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -39,7 +39,9 @@ def welcome(message):
        
 
     except Exception as e:
-        bot.send_message(message.chat.id, 'Disculpe, acabamos de presentar un error.')
+        bot.send_message(message.chat.id, 'Disculpe')
+        sti = open('error.webp', 'rb')
+        bot.send_sticker(message.chat.id, sti)
         print(e)
 
 bot.polling() #no se cierra el programa
