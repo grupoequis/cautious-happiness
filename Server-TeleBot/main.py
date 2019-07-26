@@ -28,7 +28,7 @@ def welcome(message):
         x = datetime.datetime.now()
         h = x.hour
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.add('Si', 'No')
+        markup.add('Sí', 'No')
         if(h<=12):
             r =  bot.send_message(message.chat.id, "Buenos días, bienvenido, ¿desea conectarse a su servicio de correo electrónico?", reply_markup=markup)
         elif(h<=18):

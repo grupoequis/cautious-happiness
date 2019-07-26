@@ -50,7 +50,7 @@ class start(object):
 			x = datetime.datetime.now()
 			h = x.hour
 			markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-			markup.add('Si', 'No')
+			markup.add('Sí', 'No')
 			if(h<=12):
 				r =  self.bot.send_message(message.chat.id, "Buenos días, bienvenido, ¿desea conectarse a su servicio de correo electrónico?", reply_markup=markup)
 			elif(h<=18):
@@ -68,7 +68,7 @@ class start(object):
 	def saveMail(self, message):
 
 		try:
-			if(message.text == 'Si'):
+			if(message.text == 'Sí'):
 				email = self.bot.send_message(message.chat.id,"Ingrese su correo electrónico\nEjemplo: user@gmail.com")
 				self.bot.register_next_step_handler(email, self.savePass)
 			elif(message.text == 'No'): 
@@ -78,7 +78,7 @@ class start(object):
 				self.bot.register_next_step_handler(r, self.savePass)
 			else:
 				print(message)
-				self.bot.send_message(message.chat.id,"Por favor, responda con 'Si' o 'No'")
+				self.bot.send_message(message.chat.id,"Por favor, responda con 'Sí' o 'No'")
 				self.welcome(message)
 		except Exception as e:
 			self.bot.send_message(message.chat.id, 'Disculpe')
@@ -109,7 +109,7 @@ class start(object):
 						sti = open('fail.webp', 'rb')
 						self.bot.send_sticker(message.chat.id, sti)
 						#self.bot.send_message(message.chat.id,'No se pudo establecer la conexión.')
-						self.bot.send_message(message.chat.id,'¿Es la informacion provista correcta?.')
+						self.bot.send_message(message.chat.id,'¿Es la información provista correcta?.')
 						print(be)
 						retry=1
 					if(retry==0):
@@ -123,7 +123,7 @@ class start(object):
 					else:
 						markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 						markup.add('Si', 'No')
-						r =  self.bot.send_message(message.chat.id, "¿Desea volver a intentar establecer la conexion?", reply_markup=markup)
+						r =  self.bot.send_message(message.chat.id, "¿Desea volver a intentar establecer la conexión?", reply_markup=markup)
 						self.bot.register_next_step_handler(r, self.saveMail)
 
 		except Exception as e:
@@ -170,7 +170,7 @@ class start(object):
 				self.size=len(self.fetch.emails)
 				noreaded="Usted tiene "+str(self.size)+" sin leer."
 				self.bot.send_message(message.chat.id, noreaded)
-				q = self.bot.send_message(message.chat.id, "Ingrese el numero de correos que desea visualizar.")
+				q = self.bot.send_message(message.chat.id, "Ingrese el número de correos que desea visualizar.")
 		
 				def selectQuantity(message):
 					try:
@@ -202,8 +202,8 @@ class start(object):
 											k=k+1
 
 										ogfile=file[k+1:len(file)]
-										os.rename(file,ogfile)
-										doc = open(ogfile,'rb')
+										os.rename(file,"/tmp/"+ogfile)
+										doc = open("/tmp/"+ogfile,'rb')
 										self.bot.send_document(message.chat.id, doc)
 										j=j-1
 									s=s-1
@@ -225,18 +225,18 @@ class start(object):
 											k=k+1
 
 										ogfile=file[k+1:len(file)]
-										os.rename(file,ogfile)
-										doc = open(ogfile,'rb')
+										os.rename(file,"/tmp/"+ogfile)
+										doc = open("/tmp/"+ogfile,'rb')
 										self.bot.send_document(message.chat.id, doc)
 										j=j-1
 									self.number=self.number-1
 
 							markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-							markup.add('Continuar la conexion','Cancelar')
+							markup.add('Continuar la conexión','Cancelar')
 							o = self.bot.send_message(message.chat.id, "¿Desea esperar a que lleguen nuevos correos?",reply_markup=markup)
 							def selectNextMove(message):
 								try:
-									if (message.text=='Continuar la conexion'):
+									if (message.text=='Continuar la conexión'):
 										markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 										markup.add('Cancelar')
 										p = self.bot.send_message(message.chat.id, "Puede cancelar en cualquier momento.",reply_markup=markup)
@@ -345,14 +345,14 @@ class start(object):
 	def intermedio1(self,message):
 			self.text = message.text
 			markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-			markup.add('Si','No')
+			markup.add('Sí','No')
 			r = self.bot.send_message(message.chat.id, "¿Desea adjuntar algún archivo?",reply_markup=markup)
 			self.bot.register_next_step_handler(r, self.intermedio2)
 
 	def intermedio2(self,message):
 		if(message.text=='No'):
 			self.sendMessage(message)
-		elif(message.text=='Si'):
+		elif(message.text=='Sí'):
 			markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 			markup.add('Listo')
 			r = self.bot.send_message(message.chat.id, "Adjunte los archivos a continuación.",reply_markup=markup)
@@ -436,14 +436,14 @@ class start(object):
 					self.lowrep,limitsize,self.msg=self.smtp.checkMessage(self.username,self.receiver,self.subject,self.text,self.files)
 					if (limitsize==1):
 						markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-						markup.add('Si', 'No')
+						markup.add('Sí', 'No')
 						r =  self.bot.send_message(message.chat.id, 'El tamaño es mayor a 25MB.¿Desea Continuar?', reply_markup=markup)
 						def sizeLimit(message):
 							try :
 								if(message.text=='No'):
 									raise Exception("No se quiere el archivo con mas de 25MB")
 									
-								elif(message.text=='Si'):
+								elif(message.text=='Sí'):
 									self.sendMessage2(message)
 							except Exception as z:
 								print(z)
@@ -473,17 +473,17 @@ class start(object):
 			
 			if(self.lowrep!=[]):
 				markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-				markup.add('Si', 'No')
-				self.bot.send_message(message.chat.id,'El correo posee URLs de baja reputacion')
+				markup.add('Sí', 'No')
+				self.bot.send_message(message.chat.id,'El correo posee URLs de baja reputación')
 				self.bot.send_message(message.chat.id,'Los cuales son: '+str(self.lowrep))
 				x =  self.bot.send_message(message.chat.id, '¿Desea Continuar?', reply_markup=markup)
 
 				def lowerRep(message):
 					try :
 						if(message.text=='No'):
-							raise Exception("Cancelacion de envio por baja repuacion de URL")
+							raise Exception("Cancelación de envio por baja repuacion de URL")
 							
-						elif(message.text=='Si'):
+						elif(message.text=='Sí'):
 							self.sendMessage3(message)
 
 
@@ -523,14 +523,14 @@ class start(object):
 
 	def cancelAction(self,message):
 		markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-		markup.add('Cerrar','Realizar otra Accion')
+		markup.add('Cerrar','Realizar otra acción')
 		p = self.bot.send_message(message.chat.id, "¿Qué desea hacer?",reply_markup=markup)
 		self.bot.register_next_step_handler(p, self.continueAction)
 
 
 	def continueAction(self,message):
 		try:
-				if(message.text == 'Realizar otra Accion'):
+				if(message.text == 'Realizar otra acción'):
 					markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
 					markup.add('Revisar Inbox','Enviar Email')
 					o = self.bot.send_message(message.chat.id, "¿Qué desea hacer?",reply_markup=markup)

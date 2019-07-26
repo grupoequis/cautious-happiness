@@ -26,8 +26,7 @@ class fetch(object):
                     rmessage.append(msg[header])
                 if body:
                     rmessage.append(msg.get_body(preferencelist=('plain', 'html')).get_content())
-                address="/tmp"
-                dirAddres=self.save_attachment(msg, address)
+                dirAddres=self.save_attachment(msg)
                 if (dirAddres!=[]):
                     self.i=self.i+1
                 self.attach.append(dirAddres)
@@ -40,11 +39,11 @@ class fetch(object):
 
     def fetch_message_print(self,mailbox_name, msgid, connection, body=True):
         response, message = self.fetch_message(mailbox_name, msgid, connection, body)
-        str1="{:^8}: {}".format("SUBJECT", message[0])
-        str2="{:^8}: {}".format("TO", message[1])
-        str3=str1+'\n'+str2+'\n'+"{:^8}: {}".format("FROM", message[2])
+        str1="{} {}".format("Asunto:", message[0])
+        #str2="{:^8}: {}".format("TO", message[1])
+        str3=str1+'\n'+"{} {}".format("De:", message[2])
         if body:
-            str3=str3+'\n'+"{:^8}: {}".format("BODY", message[3])
+            str3=str3+'\n'+"{} {}".format("\n", message[3])
         self.emails.append(str3)
         print(str3)
         print("----------------")
