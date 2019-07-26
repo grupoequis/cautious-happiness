@@ -14,7 +14,7 @@ if (sys.maxsize <= 2**32):
     raise SystemExit("Program must run on a 64bit system.")
 
 
-API_TOKEN="917180618:AAG47Av7a4O6GTmtERqBJzqwzQggabR_330"
+API_TOKEN="951787503:AAE6qHomMQn2wWBFOgqR-rEboUMgTrDtNOY"
 bot = telebot.TeleBot(API_TOKEN)
  
 def hdl(message):
